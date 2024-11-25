@@ -8,7 +8,7 @@ const GetStartedPage = () => {
         <>
             <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent={true} />
             <ImageBackground source={bg} style={styles.container}>
-                    <TouchableOpacity style={styles.btn} onPress={() => router.push('/(tabs)/home')}>
+                    <TouchableOpacity style={styles.btn} onPress={() => router.push('/auth/login')}>
                         <Text style={{ color: 'black', fontSize: 22, textAlign: 'center', marginVertical: 'auto', fontWeight: 'bold',}}>Get Started</Text>
                     </TouchableOpacity>
             </ImageBackground>
