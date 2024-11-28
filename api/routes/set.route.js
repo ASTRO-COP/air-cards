@@ -1,7 +1,7 @@
 const express = require('express');
 const { getAllSets, getSingleSet, addSet, updateSet, deleteSet } = require('../controllers/set.controller');
 
-router = express.Router();
+const router = express.Router();
 
 // GET //
 router.get('/', getAllSets);
