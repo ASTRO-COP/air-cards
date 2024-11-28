@@ -10,8 +10,8 @@ const TabLayout = () => {
 
                 if (route.name === "home/index") {
                     return focused ? <FontAwesome name="home" size={24} color="black" /> : <AntDesign name="home" size={24} color="black" />;
-                } else if (route.name === "create/index") {
-                    return focused ? <Ionicons name="create" size={24} color="black" /> : <Ionicons name="create-outline" size={24} color="black" />
+                } else if (route.name === "profile/index") {
+                    return focused ? <Ionicons name="person" size={24} color="black" /> : <Ionicons name="person-outline" size={24} color="black" />
                 }
 
             },
