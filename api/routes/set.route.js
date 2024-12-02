@@ -1,9 +1,10 @@
 const express = require('express');
-const { getAllSets, getSingleSet, addSet, updateSet, deleteSet } = require('../controllers/set.controller');
+const { getAllSets, getSingleSet, addSet, updateSet, deleteSet, getByBelongs } = require('../controllers/set.controller');
 
 const router = express.Router();
 
 // GET //
+router.get('/search', getByBelongs);
 router.get('/', getAllSets);
 router.get('/:id', getSingleSet);
 

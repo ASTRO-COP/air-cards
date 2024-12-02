@@ -1,9 +1,21 @@
 import { router } from "expo-router";
 import { ImageBackground, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import bg from "../assets/images/bg.jpg";
+import * as SecureStore from 'expo-secure-store';
 
-const GetStartedPage = () => {
+const GetStartedPage: React.FC = () => {
+
+    useEffect(() => {
+        const checkLogin = async () => {
+            let uid = await SecureStore.getItemAsync('uid') || '';
+            if (uid !== '') {
+                router.replace('/(tabs)/home');
+            }
+        }
+        checkLogin();
+    }, [])
+
     return (
         <>
             <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent={true} />

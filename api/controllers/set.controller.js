@@ -47,4 +47,15 @@ const updateSet = async (req, res) => {
     }
 }
 
-module.exports = { getAllSets, getSingleSet, addSet, deleteSet, updateSet };
+const getByBelongs = async (req, res) => {
+    const { belongs } = req.query;
+    try {
+        const set = await Set.find({ belongs });
+        if (!set) return res.status(404).json({ message: 'Set not found' });
+        res.status(200).json(set);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
+
+module.exports = { getAllSets, getSingleSet, addSet, deleteSet, updateSet, getByBelongs };
