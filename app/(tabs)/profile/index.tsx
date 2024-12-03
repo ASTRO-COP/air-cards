@@ -5,10 +5,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { fetchData } from "@/hooks/api";
 
-interface UserData {
-    name: string;
-}
-
 const ProfilePage = () => {
     const [username, setUsername] = useState('');
     const [loading, setLoading] = useState(false);
