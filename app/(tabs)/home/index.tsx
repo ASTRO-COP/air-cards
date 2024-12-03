@@ -57,7 +57,7 @@ const HomePage = () => {
 
                 <FlatList
                     style={styles.cardContainer}
-                    data={data}
+                    data={data.reverse()}
                     renderItem={({ item, index }) => (
                         <Set
                             key={index}
