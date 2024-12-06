@@ -1,5 +1,6 @@
 import SetCard from "@/components/SetCreateCard";
 import { AntDesign } from "@expo/vector-icons";
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { router } from "expo-router";
 import { useState } from "react";
 import {
@@ -12,7 +13,6 @@ import {
 } from "react-native";
 
 const HomePage = () => {
-    // Hardcoded data
     const [data, setData] = useState([
         { id: 1, name: "Set 1", description: "This is set 1", color: "#f28b82" },
         { id: 2, name: "Set 2", description: "This is set 2", color: "#fbbc04" },
@@ -25,15 +25,19 @@ const HomePage = () => {
             <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent={true} />
             <View style={styles.container}>
                 <View style={styles.titleContainer}>
+                    <TouchableOpacity
+                        style={{ paddingLeft: 5 }}
+                        onPress={() => router.push("/home")}
+                    >
+                        <FontAwesome6 name="reply" size={28} color="black" />
+                    </TouchableOpacity>
+                    
                     <Text style={styles.titleText}>Air Cards</Text>
                     <TouchableOpacity
                         style={{ paddingTop: 3 }}
                         onPress={() =>
                             router.push({
-                                pathname: "/create",
-                                params: {
-                                    state: "create",
-                                },
+                                pathname: "/setPage_createCard",
                             })
                         }
                     >

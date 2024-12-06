@@ -12,6 +12,7 @@ const SetCard: React.FC<SetProps> = ({ title, description, color }) => {
     return (
         <TouchableOpacity
         style={[styles.container, { backgroundColor: color }]}
+        onPress={() => router.push('/cardDetail')}
         >
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>{title}</Text>
