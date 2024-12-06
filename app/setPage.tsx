@@ -1,57 +1,60 @@
-import { Text } from "react-native";
-import {  
+import SetCard from "@/components/SetCreateCard";
+import { AntDesign } from "@expo/vector-icons";
+import { router } from "expo-router";
+import { useState } from "react";
+import {
     StyleSheet,
+    Text,
     TouchableOpacity,
     View,
     FlatList,
-    StatusBar, 
+    StatusBar,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
-import { router } from "expo-router";
 
-const SetPage = () => {
-    const data = [
-        { id: '1', title: 'Card 1', description: 'Bla bla bla 34',type: 'text1'},
-        { id: '2', title: 'Card 2', description: 'Bla bla blav55',type: 'text2' },
-        { id: '3', title: 'Card 3', description: 'Bla bla bla6565',type: 'text3' },
-        { id: '4', title: 'Card 4', description: 'Bla bla bla 78',type: 'text4' }, // Added a fourth card for demonstration
-    ];
-
-    const renderItem = ({ item }) => (
-    <View style={styles.card}>
-        <View style={styles.cardHeader}>
-            <Text style={styles.cardTitle}>{item.title}</Text>
-            <TouchableOpacity>
-                <AntDesign name="ellipsis1" size={20} color="black" />
-            </TouchableOpacity>
-        </View>
-        <Text style={styles.cardDescription}>{item.description}</Text>
-        <Text style={styles.cardDescription}>{item.type}</Text>
-    </View>
-    );
+const HomePage = () => {
+    // Hardcoded data
+    const [data, setData] = useState([
+        { id: 1, name: "Set 1", description: "This is set 1", color: "#f28b82" },
+        { id: 2, name: "Set 2", description: "This is set 2", color: "#fbbc04" },
+        { id: 3, name: "Set 3", description: "This is set 3", color: "#34a853" },
+        { id: 4, name: "Set 4", description: "This is set 4", color: "#4285f4" },
+    ]);
 
     return (
         <>
             <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent={true} />
             <View style={styles.container}>
                 <View style={styles.titleContainer}>
-                    <Text style={styles.titleText}>Set Page</Text>
-                    <TouchableOpacity style={{ paddingTop: 3 }}
+                    <Text style={styles.titleText}>Air Cards</Text>
+                    <TouchableOpacity
+                        style={{ paddingTop: 3 }}
                         onPress={() =>
                             router.push({
-                                pathname: "/setPage_createCard",
+                                pathname: "/create",
+                                params: {
+                                    state: "create",
+                                },
                             })
                         }
                     >
                         <AntDesign name="pluscircle" size={28} color="black" />
                     </TouchableOpacity>
                 </View>
+
                 <FlatList
+                    style={styles.cardContainer}
                     data={data}
-                    renderItem={renderItem}
-                    keyExtractor={item => item.id}
-                    numColumns={2}
-                    contentContainerStyle={styles.cardList}
+                    numColumns={2} 
+                    renderItem={({ item }) => (
+                        <View style={styles.cardWrapper}>
+                            <SetCard
+                                title={item.name}
+                                description={item.description}
+                                color={item.color}
+                            />
+                        </View>
+                    )}
+                    keyExtractor={(item) => item.id.toString()}
                 />
             </View>
         </>
@@ -65,7 +68,6 @@ const styles = StyleSheet.create({
     titleContainer: {
         maxWidth: "100%",
         marginTop: 50,
-        display: "flex",
         flexDirection: "row",
         paddingHorizontal: 20,
         justifyContent: "space-between",
@@ -76,42 +78,14 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: "black",
     },
-    cardList: {
-        padding: 20,
+    cardContainer: {
+        marginTop: 40,
+        paddingHorizontal: 10,
     },
-    card: {
+    cardWrapper: {
         flex: 1,
-        margin: 10,
-        backgroundColor: 'white',
-        borderTopLeftRadius: 20,
-        borderBottomRightRadius: 20,
-        borderTopRightRadius: 5,
-        borderBottomLeftRadius: 5,
-        padding: 20,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.5,
-        elevation: 5,
-    },
-    cardHeader: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        
-    },
-    cardTitle: {
-        fontSize: 25,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        color: '#7450ff',
-    },
-    cardDescription: {
-        marginTop: 10,
-        fontSize: 16,
+        margin: 5, 
     },
 });
 
-export default SetPage;
+export default HomePage;
