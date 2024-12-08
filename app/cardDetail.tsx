@@ -1,6 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, Alert } from 'react-native';
+import { StyleSheet, Text, View, Button, Alert,TouchableOpacity } from 'react-native';
 import { router } from "expo-router";
+import { FontAwesome6 } from "@expo/vector-icons";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 const CardDetail = () => {
   const showAlert = () => {
@@ -9,8 +11,18 @@ const CardDetail = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to My Simple App</Text>
-      <Button title="Press me" onPress={showAlert} />
+      <View style={styles.titleContainer}>
+          <TouchableOpacity
+            style={{ paddingLeft: 5 }}
+            onPress={() => router.push("/setPage")}
+          >
+            <FontAwesome6 name="reply" size={28} color="black" />
+          </TouchableOpacity>
+          <Text style={styles.titleText}>Create Card</Text>
+          <TouchableOpacity>
+            <MaterialCommunityIcons name="content-save-check" size={35} color="black" />
+          </TouchableOpacity>
+        </View>
     </View>
   );
 };
@@ -18,13 +30,20 @@ const CardDetail = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
   },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
+  titleContainer: {
+    maxWidth: "100%",
+    marginTop: 50,
+    display: "flex",
+    flexDirection: "row",
+    paddingHorizontal: 20,
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  titleText: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "black",
   },
 });
 
