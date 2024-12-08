@@ -2,6 +2,9 @@ import SetCard from "@/components/SetCreateCard";
 import { AntDesign } from "@expo/vector-icons";
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Fontisto from '@expo/vector-icons/Fontisto';
+import Feather from '@expo/vector-icons/Feather';
 import { router } from "expo-router";
 import { useState } from "react";
 import {
@@ -45,24 +48,28 @@ const HomePage = () => {
                     <Text style={styles.titleText}>Air Cards</Text>
                     
                    {/* Dropdown Button */}
-                <Menu
-                    visible={menuVisible}
-                    anchor={
-                        <TouchableOpacity
-                            style={styles.dropdownButton}
-                            onPress={() => setMenuVisible(true)}
-                        >
-                            <Text style={styles.dropdownText}>
-                                {isGridView ? "Grid View" : "List View"}
-                            </Text>
-                        </TouchableOpacity>
-                    }
-                    onRequestClose={() => setMenuVisible(false)}
-                >
-                    <MenuItem onPress={() => toggleLayout("grid")}>Grid View</MenuItem>
-                    <MenuItem onPress={() => toggleLayout("list")}>List View</MenuItem>
-                </Menu>
-                <TouchableOpacity
+                    <Menu
+                        visible={menuVisible}
+                        anchor={
+                            <TouchableOpacity
+                                style={styles.dropdownButton}
+                                onPress={() => setMenuVisible(true)}
+                            >
+                                <Text>
+                                    {isGridView ? <Feather name="grid" size={24}  color="white" />: <FontAwesome name="th-list" size={23} color="white" />}
+                                </Text>
+                            </TouchableOpacity>
+                        }
+                        onRequestClose={() => setMenuVisible(false)}
+                    >
+                        <MenuItem onPress={() => toggleLayout("grid")}  >
+                            <Feather name="grid" size={24} color="black"  /> Grid
+                        </MenuItem>
+                        <MenuItem onPress={() => toggleLayout("list")} >
+                            <Feather name="list" size={24} color="black" /> List
+                        </MenuItem>
+                    </Menu>
+                    <TouchableOpacity
                         onPress={() =>
                             router.push({
                                 pathname: "/setPage_createCard",
@@ -73,7 +80,12 @@ const HomePage = () => {
                         <AntDesign name="pluscircle" size={30} color="black" />
                     </TouchableOpacity>
                 </View>
-
+                <View style={styles.sortContainer}>
+                    <TouchableOpacity><Text style={styles.sortText}>All</Text></TouchableOpacity>
+                    <TouchableOpacity><Text style={styles.sortText2}>Latest</Text></TouchableOpacity>
+                    <TouchableOpacity><Text style={styles.sortText}>Oldest</Text></TouchableOpacity>
+                    <TouchableOpacity><Text style={styles.sortText2}>A-Z</Text></TouchableOpacity>
+                </View>
                 
 
                 <FlatList
@@ -115,17 +127,15 @@ const styles = StyleSheet.create({
         color: "black",
     },
     dropdownButton: {
-        padding: 5,
+        paddingHorizontal: 8,
+        paddingVertical: 2,
+        borderRadius: 10,
+        backgroundColor: "#000000",
+        justifyContent: "center",
         marginTop:2,
         marginLeft: 15,
-        backgroundColor: '#000000',
         borderWidth:2,
         borderColor: '#c2c0c0',
-        borderRadius: 8,
-    },
-    dropdownText: {
-        fontSize: 16,
-        color: "#f7f2f2",
     },
     cardContainer: {
         marginTop: 40,
@@ -135,6 +145,52 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 5, 
     },
+    sortContainer:{
+        flexDirection: "row",
+        marginLeft: 10,
+    },
+    sortText:{
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "black",
+        marginLeft: 10,
+        marginTop: 10,
+        paddingHorizontal: 20,
+        paddingVertical: 5,
+        borderWidth:2,
+        borderColor: '#c2c0c0',
+        borderTopLeftRadius: 10,
+        borderTopRightRadius:25,
+        borderBottomLeftRadius:10,
+        borderBottomRightRadius: 5,
+        elevation: 2,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        backgroundColor: "#f7f2f2",
+        shadowColor: "#000",
+    },
+    sortText2:{
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "black",
+        marginLeft: 10,
+        marginTop: 10,
+        paddingHorizontal: 20,
+        paddingVertical: 5,
+        borderWidth:2,
+        borderColor: '#c2c0c0',
+        borderTopLeftRadius: 10,
+        borderTopRightRadius:5,
+        borderBottomLeftRadius:25,
+        borderBottomRightRadius: 10,
+        elevation: 2,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        backgroundColor: "#f7f2f2",
+        shadowColor: "#000",
+    }
 });
 
 export default HomePage;

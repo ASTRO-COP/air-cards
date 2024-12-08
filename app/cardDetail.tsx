@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, Alert,TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, Alert,TouchableOpacity,StatusBar } from 'react-native';
 import { router } from "expo-router";
 import { FontAwesome6 } from "@expo/vector-icons";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -10,6 +10,8 @@ const CardDetail = () => {
   };
 
   return (
+  <>
+    <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent={true} />
     <View style={styles.container}>
       <View style={styles.titleContainer}>
           <TouchableOpacity
@@ -24,6 +26,7 @@ const CardDetail = () => {
           </TouchableOpacity>
         </View>
     </View>
+  </>
   );
 };
 
