@@ -72,7 +72,7 @@ const HomePage = () => {
                     <TouchableOpacity
                         onPress={() =>
                             router.push({
-                                pathname: "/setPage_createCard",
+                                pathname: "/",
                             })
                         }
                     >
