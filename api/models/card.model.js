@@ -13,9 +13,17 @@ const CardSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    liked: {
-        type: Boolean,
-        default: false,
+    content: {
+        type: String,
+        required: false,
+    },
+    color: {
+        type: String,
+        required: true,
+    },
+    datetime: {
+        type: Date,
+        default: Date.now(),
     }
 })
 

@@ -4,15 +4,16 @@ import { router } from "expo-router";
 
 interface SetProps {
     title: string;
-    description: string;
+    definition: string;
     color: string;
+    teleport: () => void;
 }
 
-const SetCard: React.FC<SetProps> = ({ title, description, color }) => {
+const SetCard: React.FC<SetProps> = ({ title, definition, color, teleport }) => {
     return (
         <TouchableOpacity
         style={[styles.container, { backgroundColor: color }]}
-        onPress={() => router.push('/cardDetail')}
+        onPress={() => teleport()}
         >
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>{title}</Text>
@@ -20,7 +21,7 @@ const SetCard: React.FC<SetProps> = ({ title, description, color }) => {
                     <Feather name="edit" size={24} color="white" />
                 </TouchableOpacity>
             </View>
-            <Text style={styles.description}>{description}</Text>
+            <Text style={styles.description}>{definition}</Text>
         </TouchableOpacity>
     );
 };
@@ -43,12 +44,12 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     title: {
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: "semibold",
         color: "#FFF6E9",
     },
     description: {
-        marginHorizontal: 18,
+        marginHorizontal: 14,
         marginTop: 10,
         color: "#FFF6E9",
     },

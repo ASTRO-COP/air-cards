@@ -6,12 +6,13 @@ interface SetProps {
     title: string;
     description: string;
     color: string;
+    teleport: () => void;
 }
 
-const Set: React.FC<SetProps> = ({ title, description, color }) => {
+const Set: React.FC<SetProps> = ({ title, description, color, teleport }) => {
     return (
         <TouchableOpacity
-            onPress={() => router.push('/setPage')}
+            onPress={() => teleport()}
             style={[styles.container, { backgroundColor: color }]}
         >
             <View style={styles.titleContainer}>

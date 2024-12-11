@@ -18,6 +18,7 @@ import * as SecureStore from 'expo-secure-store';
 const HomePage = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
+    
 
     useEffect(() => {
         const getData = async () => {
@@ -26,6 +27,7 @@ const HomePage = () => {
             try {
                 const result = await fetchData(`/sets/search?belongs=${uid}`);
                 setData(result);
+                console.log(data._id)
             } catch (err) {
                 console.log(err);
             }
@@ -64,6 +66,14 @@ const HomePage = () => {
                             title={item.name}
                             description={item.description}
                             color={item.color}
+                            teleport={() => {
+                                router.push({
+                                    pathname: '/setPage',
+                                    params: {
+                                        setId: item._id
+                                    }
+                                })
+                            }}
                         />
                     )}
                 />

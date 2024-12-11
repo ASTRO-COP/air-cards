@@ -5,8 +5,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import Feather from '@expo/vector-icons/Feather';
-import { router } from "expo-router";
-import { useState } from "react";
+import { router, useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
 import {
     StyleSheet,
     Text,
@@ -16,14 +16,30 @@ import {
     StatusBar,
 } from "react-native";
 import { Menu, MenuItem } from 'react-native-material-menu'; // Example: React Native Material Menu
+import { fetchData } from "@/hooks/api";
+import { useIsFocused } from "@react-navigation/native";
 
 const setPage = () => {
-    const [data, setData] = useState([
-        { id: 1, name: "Set 1", description: "This is set 1", color: "#f28b82" },
-        { id: 2, name: "Set 2", description: "This is set 2", color: "#fbbc04" },
-        { id: 3, name: "Set 3", description: "This is set 3", color: "#34a853" },
-        { id: 4, name: "Set 4", description: "This is set 4", color: "#4285f4" },
-    ]);
+    const { setId } = useLocalSearchParams(); 
+    const isFocused = useIsFocused();
+
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        const getData = async () => {
+            try {
+                const result = await fetchData(`/cards/search?belongs=${setId}`);
+                setData(result);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        getData();
+
+        if (isFocused) {
+            getData();
+        }
+    }, []);
 
     const [isGridView, setIsGridView] = useState(true); // State to toggle view
     const [menuVisible, setMenuVisible] = useState(false); // Dropdown visibility
@@ -78,7 +94,11 @@ const setPage = () => {
                     <TouchableOpacity
                         onPress={() =>
                             router.push({
-                                pathname: "/",
+                                pathname: "/createCard",
+                                params: {
+                                    state: 'create',
+                                    setId: setId,
+                                }
                             })
                         }
                     >
@@ -146,12 +166,20 @@ const setPage = () => {
                         <View style={styles.cardWrapper}>
                             <SetCard
                                 title={item.name}
-                                description={item.description}
+                                definition={item.definition}
                                 color={item.color}
+                                teleport={() => {
+                                    router.push({
+                                        pathname: '/cardDetail',
+                                        params: {
+                                            setId: item._id,
+                                        }
+                                    })
+                                }}
                             />
                         </View>
                     )}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyExtractor={(item) => item._id.toString()}
                 />
             </View>
         </>

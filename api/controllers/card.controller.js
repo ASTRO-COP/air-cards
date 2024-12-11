@@ -46,4 +46,15 @@ const updateCard = async (req, res) => {
     }
 }
 
-module.exports = { getAllCards, getSingleCard, addCard, deleteCard, updateCard };
+const getByBelongs = async (req, res) => {
+    const { belongs } = req.query;
+    try {
+        const card = await Card.find({ belongs });
+        if (!card) return res.status(404).json({ message: 'Card not found' });
+        res.status(200).json(card);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
+
+module.exports = { getAllCards, getSingleCard, addCard, deleteCard, updateCard, getByBelongs };
