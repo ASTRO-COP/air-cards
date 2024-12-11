@@ -17,7 +17,7 @@ import {
 } from "react-native";
 import { Menu, MenuItem } from 'react-native-material-menu'; // Example: React Native Material Menu
 
-const HomePage = () => {
+const setPage = () => {
     const [data, setData] = useState([
         { id: 1, name: "Set 1", description: "This is set 1", color: "#f28b82" },
         { id: 2, name: "Set 2", description: "This is set 2", color: "#fbbc04" },
@@ -31,6 +31,12 @@ const HomePage = () => {
     const toggleLayout = (layout) => {
         setIsGridView(layout === "grid");
         setMenuVisible(false); // Close dropdown after selection
+    };
+
+    const [selected, setSelected] = useState('All'); // State to track the selected button
+
+    const handlePress = (buttonName) => {
+        setSelected(buttonName); // Update the state with the button name
     };
 
     return (
@@ -81,10 +87,53 @@ const HomePage = () => {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.sortContainer}>
-                    <TouchableOpacity><Text style={styles.sortText}>All</Text></TouchableOpacity>
-                    <TouchableOpacity><Text style={styles.sortText2}>Latest</Text></TouchableOpacity>
-                    <TouchableOpacity><Text style={styles.sortText}>Oldest</Text></TouchableOpacity>
-                    <TouchableOpacity><Text style={styles.sortText2}>A-Z</Text></TouchableOpacity>
+                    {/* "All" button */}
+                    <TouchableOpacity onPress={() => handlePress('All')}>
+                        <Text
+                            style={[
+                                styles.sortText,
+                                selected === 'All' && styles.selectedText, // Highlight if selected
+                            ]}
+                        >
+                            All
+                        </Text>
+                    </TouchableOpacity>
+
+                    {/* "Latest" button */}
+                    <TouchableOpacity onPress={() => handlePress('Latest')}>
+                        <Text
+                            style={[
+                                styles.sortText2,
+                                selected === 'Latest' && styles.selectedText, // Highlight if selected
+                            ]}
+                        >
+                            Latest
+                        </Text>
+                    </TouchableOpacity>
+
+                    {/* "Oldest" button */}
+                    <TouchableOpacity onPress={() => handlePress('Oldest')}>
+                        <Text
+                            style={[
+                                styles.sortText,
+                                selected === 'Oldest' && styles.selectedText, // Highlight if selected
+                            ]}
+                        >
+                            Oldest
+                        </Text>
+                    </TouchableOpacity>
+
+                    {/* "A-Z" button */}
+                    <TouchableOpacity onPress={() => handlePress('A-Z')}>
+                        <Text
+                            style={[
+                                styles.sortText2,
+                                selected === 'A-Z' && styles.selectedText, // Highlight if selected
+                            ]}
+                        >
+                            A-Z
+                        </Text>
+                    </TouchableOpacity>
                 </View>
                 
 
@@ -190,7 +239,12 @@ const styles = StyleSheet.create({
         shadowRadius: 2,
         backgroundColor: "#f7f2f2",
         shadowColor: "#000",
-    }
+    },
+    selectedText: {
+        fontWeight: 'bold',
+        backgroundColor: '#000000',
+        color: '#ffffff',
+    },
 });
 
-export default HomePage;
+export default setPage;

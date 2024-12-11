@@ -16,7 +16,7 @@ const SetCard: React.FC<SetProps> = ({ title, description, color }) => {
         >
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>{title}</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=> router.push('/#')}>
                     <Feather name="edit" size={24} color="white" />
                 </TouchableOpacity>
             </View>
