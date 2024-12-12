@@ -11,13 +11,14 @@ import {
 import { router, useLocalSearchParams } from "expo-router";
 import { FontAwesome6 } from "@expo/vector-icons";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
-import { fetchData } from "@/hooks/api";
+import { deleteData, fetchData } from "@/hooks/api";
 
 const CardDetail = () => {
     const [isOptionsVisible, setOptionsVisible] = useState(false);
     const [isColorOptionsVisible, setIsColorOptionsVisible] = useState(false);
     const [data, setData] = useState([]);
-    const { setId } = useLocalSearchParams();
+    const { cardId } = useLocalSearchParams();
+    const [loading, setLoading] = useState(false);
 
     const toggleOptionsMenu = () => {
         setOptionsVisible(!isOptionsVisible);
@@ -30,15 +31,31 @@ const CardDetail = () => {
 
     useEffect(() => {
       const getData = async () => {
+        setLoading(true);
         try {
-          const result = await fetchData(`/cards/${setId}`);
+          const result = await fetchData(`/cards/${cardId}`);
           setData(result);
         } catch (err) {
           console.log(err);
+        } finally {
+            setLoading(false);
         }
       }
       getData();
     }, []);
+
+    const deleteCard = async () => {
+        setLoading(true);
+        try {
+            const result = await deleteData(`/cards/${cardId}`);
+            router.replace('/')
+            console.log(result);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     return (
         <TouchableWithoutFeedback onPress={closeOptionsMenu}>
@@ -93,7 +110,8 @@ const CardDetail = () => {
                             onPress={() => router.push({
                               pathname: '/createCard',
                               params: {
-                                state: 'update'
+                                state: 'update',
+                                cardId: cardId,
                               }
                             })}
                         >
@@ -101,7 +119,7 @@ const CardDetail = () => {
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={styles.optionItem2}
-                            onPress={() => alert("Delete clicked")}
+                            onPress={() => deleteCard()}
                         >
                             <Text style={styles.optionText2}>Delete</Text>
                         </TouchableOpacity>

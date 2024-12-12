@@ -172,7 +172,16 @@ const setPage = () => {
                                     router.push({
                                         pathname: '/cardDetail',
                                         params: {
-                                            setId: item._id,
+                                            cardId: item._id,
+                                        }
+                                    })
+                                }}
+                                updateTeleport={() => {
+                                    router.push({
+                                        pathname: '/createCard',
+                                        params: {
+                                            state: 'update',
+                                            cardId: item._id,
                                         }
                                     })
                                 }}

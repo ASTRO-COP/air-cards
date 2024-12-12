@@ -11,17 +11,18 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import * as SecureStore from 'expo-secure-store';
-import { postData } from "@/hooks/api";
+import * as SecureStore from "expo-secure-store";
+import { fetchData, postData, updateData } from "@/hooks/api";
 import { router } from "expo-router";
 import { useIsFocused } from "@react-navigation/native";
 
 const createCardPage = () => {
-    const { state, setId } = useLocalSearchParams();
-    const [name, setName] = useState('');
-    const [definition, setDefinition] = useState('');
+    const { state, setId, cardId } = useLocalSearchParams();
+    const [name, setName] = useState("");
+    const [definition, setDefinition] = useState("");
     const [content, setContent] = useState("");
     const [selectedColor, setSelectedColor] = useState("#0A5EB0");
+    const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const colors = [
@@ -32,29 +33,73 @@ const createCardPage = () => {
         "#7ED4AD",
         "#1A1A1D",
     ];
-    
+
     useEffect(() => {
-        console.log(setId);
-    }, [])
+        const getData = async () => {
+            setLoading(true);
+            try {
+                const result = await fetchData(`/cards/${cardId}`);
+                setData(result);
+                setSelectedColor(result.color);
+                setName(result.name);
+                setDefinition(result.definition);
+                setContent(result.content);
+            } catch (err) {
+                console.log(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        state === "update" && getData();
+    }, []);
 
     const createCard = async () => {
-        const data = {
+        const cardData = {
             name: name,
-            belongs: setId,
+            belongs: cardId,
             definition: definition,
             content: content,
             color: selectedColor,
+        };
+
+        if (name !== "" && definition !== "") {
+            setLoading(true);
+            try {
+                const result = await postData("/cards", cardData);
+                console.log(result);
+                router.replace("/(tabs)/home");
+            } catch (err) {
+                console.log(err);
+            } finally {
+                setLoading(false);
+            }
         }
 
-        setLoading(true);
-        try {
-            const result = await postData('/cards', data);
-            console.log(result);
-            router.replace('/(tabs)/home');
-        } catch (err) {
-            console.log(err);
+    };
+
+    const updateCard = async () => {
+        const cardData = {
+            name: name,
+            definition: definition,
+            content: content,
+            color: selectedColor,
+        };
+
+        if (name !== "" && definition !== "") {
+            setLoading(true);
+            try {
+                const result = await updateData(`/cards/${cardId}`, cardData);
+                console.log(result);
+                console.log(name);
+                router.replace("/(tabs)/home");
+            } catch (err) {
+                console.log(err);
+            } finally {
+                setLoading(false);
+            }
         }
-    }
+
+    };
 
     return (
         <>
@@ -65,21 +110,33 @@ const createCardPage = () => {
             />
             <View style={styles.container}>
                 <View style={styles.titleContainer}>
-                    <Text style={styles.titleText}>{ state === "create" ? "Create New Card" : "Update Set" }</Text>
-                    <TouchableOpacity onPress={() => createCard()}>
+                    <Text style={styles.titleText}>
+                        {state === "create" ? "Create New Card" : "Update Set"}
+                    </Text>
+                    <TouchableOpacity
+                        onPress={() => {
+                            state === "create" ? createCard() : updateCard();
+                        }}
+                    >
                         <FontAwesome6 name="save" size={24} color="black" />
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.formContainer}>
                     <View style={styles.inputContainer}>
-                        <TextInput style={styles.input} placeholder="Name" onChangeText={(text) => setName(text)} />
+                        <TextInput
+                            style={styles.input}
+                            value={name}
+                            placeholder={"Name"}
+                            onChangeText={(text) => setName(text)}
+                        />
                     </View>
 
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            placeholder="Definition"
+                            value={definition}
+                            placeholder={"Definition"}
                             multiline={true}
                             onChangeText={(text) => setDefinition(text)}
                         />
@@ -88,7 +145,8 @@ const createCardPage = () => {
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            placeholder="Content"
+                            value={content}
+                            placeholder={"Content"}
                             multiline={true}
                             onChangeText={(text) => setContent(text)}
                         />

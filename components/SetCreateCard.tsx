@@ -7,9 +7,11 @@ interface SetProps {
     definition: string;
     color: string;
     teleport: () => void;
+    updateTeleport: () => void;
+    deleteTeleport: () => void;
 }
 
-const SetCard: React.FC<SetProps> = ({ title, definition, color, teleport }) => {
+const SetCard: React.FC<SetProps> = ({ title, definition, color, teleport, updateTeleport }) => {
     return (
         <TouchableOpacity
         style={[styles.container, { backgroundColor: color }]}
@@ -17,7 +19,7 @@ const SetCard: React.FC<SetProps> = ({ title, definition, color, teleport }) => 
         >
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>{title}</Text>
-                <TouchableOpacity onPress={()=> router.push('/#')}>
+                <TouchableOpacity onPress={()=> updateTeleport()}>
                     <Feather name="edit" size={24} color="white" />
                 </TouchableOpacity>
             </View>
