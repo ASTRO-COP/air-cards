@@ -15,6 +15,7 @@ import * as SecureStore from "expo-secure-store";
 import { fetchData, postData, updateData } from "@/hooks/api";
 import { router } from "expo-router";
 import { useIsFocused } from "@react-navigation/native";
+import React from "react";
 
 const createCardPage = () => {
     const { state, setId, cardId } = useLocalSearchParams();
@@ -56,7 +57,7 @@ const createCardPage = () => {
     const createCard = async () => {
         const cardData = {
             name: name,
-            belongs: cardId,
+            belongs: setId,
             definition: definition,
             content: content,
             color: selectedColor,

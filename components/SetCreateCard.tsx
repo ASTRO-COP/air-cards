@@ -8,7 +8,6 @@ interface SetProps {
     color: string;
     teleport: () => void;
     updateTeleport: () => void;
-    deleteTeleport: () => void;
 }
 
 const SetCard: React.FC<SetProps> = ({ title, definition, color, teleport, updateTeleport }) => {

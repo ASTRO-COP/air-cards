@@ -7,9 +7,10 @@ interface SetProps {
     description: string;
     color: string;
     teleport: () => void;
+    updateTeleport: () => void;
 }
 
-const Set: React.FC<SetProps> = ({ title, description, color, teleport }) => {
+const Set: React.FC<SetProps> = ({ title, description, color, teleport, updateTeleport }) => {
     return (
         <TouchableOpacity
             onPress={() => teleport()}
@@ -17,7 +18,7 @@ const Set: React.FC<SetProps> = ({ title, description, color, teleport }) => {
         >
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>{title}</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => updateTeleport()}>
                     <Feather name="edit" size={24} color="white" />
                 </TouchableOpacity>
             </View>

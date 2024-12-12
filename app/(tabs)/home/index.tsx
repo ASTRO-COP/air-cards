@@ -74,6 +74,15 @@ const HomePage = () => {
                                     }
                                 })
                             }}
+                            updateTeleport={() => {
+                                router.push({
+                                    pathname: '/create',
+                                    params: {
+                                        state: 'update',
+                                        setId: item._id,
+                                    }
+                                })
+                            }}
                         />
                     )}
                 />

@@ -18,12 +18,22 @@ import {
 import { Menu, MenuItem } from 'react-native-material-menu'; // Example: React Native Material Menu
 import { fetchData } from "@/hooks/api";
 import { useIsFocused } from "@react-navigation/native";
+import React from "react";
+
+interface CardData {
+    name: string;
+    definition: string;
+    content: string;
+    color: string;
+    datetime: Date;
+    _id: string;
+}
 
 const setPage = () => {
     const { setId } = useLocalSearchParams(); 
     const isFocused = useIsFocused();
 
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<CardData[]>([]);
 
     useEffect(() => {
         const getData = async () => {
@@ -44,14 +54,14 @@ const setPage = () => {
     const [isGridView, setIsGridView] = useState(true); // State to toggle view
     const [menuVisible, setMenuVisible] = useState(false); // Dropdown visibility
 
-    const toggleLayout = (layout) => {
+    const toggleLayout = (layout: string) => {
         setIsGridView(layout === "grid");
         setMenuVisible(false); // Close dropdown after selection
     };
 
     const [selected, setSelected] = useState('All'); // State to track the selected button
 
-    const handlePress = (buttonName) => {
+    const handlePress = (buttonName: string) => {
         setSelected(buttonName); // Update the state with the button name
     };
 

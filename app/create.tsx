@@ -8,17 +8,20 @@ import {
     StyleSheet,
     Text,
     TextInput,
+    Touchable,
     TouchableOpacity,
     View,
 } from "react-native";
-import * as SecureStore from 'expo-secure-store';
-import { postData } from "@/hooks/api";
+import * as SecureStore from "expo-secure-store";
+import { deleteData, fetchData, postData, updateData } from "@/hooks/api";
 import { router } from "expo-router";
+import { ScreenStackHeaderBackButtonImage } from "react-native-screens";
+import React from "react";
 
 const createPage = () => {
-    const { state } = useLocalSearchParams();
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
+    const { state, setId } = useLocalSearchParams();
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
     const [category, setCategory] = useState("");
     const [selectedColor, setSelectedColor] = useState("#0A5EB0");
     const [loading, setLoading] = useState(false);
@@ -31,13 +34,27 @@ const createPage = () => {
         "#7ED4AD",
         "#1A1A1D",
     ];
-    
+
     useEffect(() => {
-        console.log(state);
-    }, [])
+        const getData = async () => {
+            setLoading(true);
+            try {
+                const result = await fetchData(`/sets/${setId}`);
+                setName(result.name);
+                setDescription(result.description);
+                setCategory(result.category);
+                setSelectedColor(result.color);
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        state === "update" && getData();
+    }, []);
 
     const createSet = async () => {
-        const uid = await SecureStore.getItemAsync('uid');
+        const uid = await SecureStore.getItemAsync("uid");
 
         const data = {
             name: name,
@@ -45,17 +62,50 @@ const createPage = () => {
             description: description,
             category: category,
             color: selectedColor,
-        }
+        };
 
         setLoading(true);
         try {
-            const result = await postData('/sets', data);
+            const result = await postData("/sets", data);
             console.log(result);
-            router.replace('/(tabs)/home');
+            router.replace("/(tabs)/home");
         } catch (err) {
             console.log(err);
         }
-    }
+    };
+
+    const updateSet = async () => {
+        const data = {
+            name: name,
+            description: description,
+            category: category,
+            color: selectedColor,
+        };
+
+        setLoading(true);
+        try {
+            const result = await updateData(`/sets/${setId}`, data);
+            console.log(result);
+            router.push("/(tabs)/home");
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const deleteSet = async () => {
+        setLoading(true);
+        try {
+            const result = await deleteData(`/sets/${setId}`);
+            console.log(result);
+            router.push("/(tabs)/home");
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <>
@@ -66,20 +116,32 @@ const createPage = () => {
             />
             <View style={styles.container}>
                 <View style={styles.titleContainer}>
-                    <Text style={styles.titleText}>{ state === "create" ? "Create New Set" : "Update Set" }</Text>
-                    <TouchableOpacity onPress={() => createSet()}>
+                    <Text style={styles.titleText}>
+                        {state === "create" ? "Create New Set" : "Update Set"}
+                    </Text>
+                    <TouchableOpacity
+                        onPress={() =>
+                            state === "create" ? createSet() : updateSet()
+                        }
+                    >
                         <FontAwesome6 name="save" size={24} color="black" />
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.formContainer}>
                     <View style={styles.inputContainer}>
-                        <TextInput style={styles.input} placeholder="Name" onChangeText={(text) => setName(text)} />
+                        <TextInput
+                            style={styles.input}
+                            value={name}
+                            placeholder="Name"
+                            onChangeText={(text) => setName(text)}
+                        />
                     </View>
 
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
+                            value={description}
                             placeholder="Description"
                             multiline={true}
                             onChangeText={(text) => setDescription(text)}
@@ -117,6 +179,17 @@ const createPage = () => {
                         ))}
                     </View>
                 </View>
+                <TouchableOpacity
+                    style={[
+                        styles.deleteBtn,
+                        state === "create"
+                            ? { display: "none" }
+                            : { display: "flex" },
+                    ]}
+                    onPress={() => deleteSet()}
+                >
+                    <Text style={{ fontSize: 24, color: "white" }}>Delete</Text>
+                </TouchableOpacity>
             </View>
         </>
     );
@@ -169,6 +242,17 @@ const styles = StyleSheet.create({
     selectedColor: {
         borderColor: "black",
         borderWidth: 3,
+    },
+    deleteBtn: {
+        marginTop: "auto",
+        width: "90%",
+        alignSelf: "center",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "red",
+        marginBottom: 40,
+        height: 60,
+        borderRadius: 10,
     },
 });
 
