@@ -13,6 +13,14 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import { deleteData, fetchData } from "@/hooks/api";
 
+interface cardData {
+    name: string;
+    definition: string;
+    content: string;
+    color: string;
+    datetime: string;
+}
+
 const CardDetail = () => {
     const [isOptionsVisible, setOptionsVisible] = useState(false);
     const [isColorOptionsVisible, setIsColorOptionsVisible] = useState(false);
@@ -35,6 +43,7 @@ const CardDetail = () => {
         try {
           const result = await fetchData(`/cards/${cardId}`);
           setData(result);
+          console.log();
         } catch (err) {
           console.log(err);
         } finally {
@@ -48,7 +57,7 @@ const CardDetail = () => {
         setLoading(true);
         try {
             const result = await deleteData(`/cards/${cardId}`);
-            router.replace('/')
+            router.back();
             console.log(result);
         } catch (err) {
             console.error(err);
