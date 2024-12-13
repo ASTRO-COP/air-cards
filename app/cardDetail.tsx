@@ -13,7 +13,7 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import { deleteData, fetchData } from "@/hooks/api";
 
-interface cardData {
+interface CardData {
     name: string;
     definition: string;
     content: string;
