@@ -8,28 +8,32 @@ const TabLayout = () => {
     const { theme, isDarkMode } = useTheme();
 
     return (
-        <Tabs  screenOptions={({ route }) => ({
+    <View style={{ flex: 1, backgroundColor: theme.background }}>
+        <Tabs  
+        screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
 
                 if (route.name === "home/index") {
-                    return focused ? <FontAwesome name="home" size={24} color={theme.text} /> : <AntDesign name="home" size={24} color={theme.text} />;
+                    return focused ? <FontAwesome name="home" size={24} color={theme.background} /> : <AntDesign name="home" size={24} color={theme.background} />;
                 } else if (route.name === "profile/index") {
-                    return focused ? <Ionicons name="person" size={24} color={theme.text} /> : <Ionicons name="person-outline" size={24} color={theme.text} />
+                    return focused ? <Ionicons name="person" size={24} color={theme.background} /> : <Ionicons name="person-outline" size={24} color={theme.background} />
                 }
 
             },
             title: '',
             headerShown: false,
             tabBarStyle: {
-                backgroundColor: theme.background,
+                backgroundColor: theme.text,
                 marginBottom: 20,
                 marginHorizontal: 20,
                 borderRadius: 10,
                 paddingTop: 5,
             }
+            
         })}>
             
         </Tabs>
+    </View>
     );
 };
 

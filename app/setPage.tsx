@@ -79,11 +79,9 @@ const SetPage = () => {
                         style={{ paddingLeft: 5 }}
                         onPress={() => router.push("/home")}
                     >
-                        <FontAwesome6 name="reply" size={28} color="black" />
+                        <FontAwesome6 name="reply" size={28} color={theme.text} />
                     </TouchableOpacity>
-                    <Text style={[styles.title, { color: theme.text }]}>Air Cards</Text>
-                        <Button title="Toggle Theme" onPress={toggleTheme} />
-                    <Text style={styles.titleText}>Air Cards</Text>
+                    <Text style={[styles.titleText, {color:theme.text}]}>Air Cards</Text>
                     
                    {/* Dropdown Button */}
                     <Menu
@@ -119,7 +117,7 @@ const SetPage = () => {
                         }
                     >
                         
-                        <AntDesign name="pluscircle" size={30} color="black" />
+                        <AntDesign name="pluscircle" size={30} color={theme.text} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.sortContainer}>

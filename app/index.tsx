@@ -6,6 +6,7 @@
 
     const GetStartedPage: React.FC = () => {
 
+
         useEffect(() => {
             const checkLogin = async () => {
                 let uid = await SecureStore.getItemAsync('uid') || '';

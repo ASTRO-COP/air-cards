@@ -4,11 +4,17 @@ import * as SecureStore from 'expo-secure-store';
 const lightTheme = {
   background: "#FFFFFF",
   text: "#000000",
+  detailtitle: '#a16e00',
+  datetime: '#480487',
+  tabbackground: "#ff0000"
 };
 
 const darkTheme = {
-  background: "#000000",
+  background: "#303030",
   text: "#FFFFFF",
+  detailtitle: '#0ad6f5',
+  datetime: '#fff700',
+  tabbackground: "#9005ed"
 };
 
 interface ThemeContextProps {

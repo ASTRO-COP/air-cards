@@ -12,8 +12,10 @@ import { router, useLocalSearchParams } from "expo-router";
 import { FontAwesome6 } from "@expo/vector-icons";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import { deleteData, fetchData } from "@/hooks/api";
+import { useTheme } from "@/hooks/ThemeProvider";
 
 const CardDetail = () => {
+    const { theme, toggleTheme, isDarkMode } = useTheme();
     const [isOptionsVisible, setOptionsVisible] = useState(false);
     const [isColorOptionsVisible, setIsColorOptionsVisible] = useState(false);
     const [data, setData] = useState([]);
@@ -59,7 +61,7 @@ const CardDetail = () => {
 
     return (
         <TouchableWithoutFeedback onPress={closeOptionsMenu}>
-            <View style={[styles.container]}>
+            <View style={[styles.container, { backgroundColor: theme.background }]}>
                 <StatusBar
                     barStyle="dark-content"
                     backgroundColor="transparent"
@@ -73,31 +75,31 @@ const CardDetail = () => {
                         <FontAwesome6
                             name="reply"
                             size={28}
-                            color={"#1A1A1D"}
+                            color={theme.text}
                         />
                     </TouchableOpacity>
-                    <Text style={[styles.titleText, { color: "black" }]}>
+                    <Text style={[styles.titleText, { color:theme.text }]}>
                         Create Detail
                     </Text>
                     <TouchableOpacity onPress={toggleOptionsMenu}>
                         <SimpleLineIcons
                             name="options-vertical"
                             size={24}
-                            color={"black"}
+                            color={theme.text}
                         />
                     </TouchableOpacity>
                 </View>
                 <View style={[styles.card]}>
-                    <Text style={[styles.cardTitle, { color: "black" }]}>
+                    <Text style={[styles.cardTitle, { color:theme.detailtitle }]}>
                         {data.name}
                     </Text>
-                    <Text style={[styles.cardDatetime, { color: "black" }]}>
+                    <Text style={[styles.cardDatetime, { color: theme.datetime }]}>
                         {data.datetime}
                     </Text>
-                    <Text style={[styles.cardDescription, { color: "black" }]}>
+                    <Text style={[styles.cardDescription, { color: theme.text }]}>
                         {data.definition}
                     </Text>
-                    <Text style={[styles.cardDescription, { color: "black" }]}>
+                    <Text style={[styles.cardDescription, { color: theme.text }]}>
                         {data.content}
                     </Text>
                 </View>
@@ -106,7 +108,7 @@ const CardDetail = () => {
                 {isOptionsVisible && (
                     <View style={styles.optionsMenu}>
                         <TouchableOpacity
-                            style={styles.optionItem}
+                            style={[styles.optionItem, { backgroundColor: theme.text}]}
                             onPress={() => router.push({
                               pathname: '/createCard',
                               params: {
@@ -115,10 +117,10 @@ const CardDetail = () => {
                               }
                             })}
                         >
-                            <Text style={styles.optionText}>Edit</Text>
+                            <Text style={[styles.optionText,{color:theme.background}]}>Edit</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={styles.optionItem2}
+                            style={[styles.optionItem2, { backgroundColor: theme.text }]}
                             onPress={() => deleteCard()}
                         >
                             <Text style={styles.optionText2}>Delete</Text>

@@ -17,8 +17,10 @@ import { deleteData, fetchData, postData, updateData } from "@/hooks/api";
 import { router } from "expo-router";
 import { ScreenStackHeaderBackButtonImage } from "react-native-screens";
 import React from "react";
+import { useTheme } from "@/hooks/ThemeProvider";
 
 const createPage = () => {
+    const { theme, toggleTheme, isDarkMode } = useTheme();
     const { state, setId } = useLocalSearchParams();
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -114,9 +116,19 @@ const createPage = () => {
                 backgroundColor="transparent"
                 translucent={true}
             />
-            <View style={styles.container}>
+            <View style={[styles.container, { backgroundColor: theme.background }]}>
                 <View style={styles.titleContainer}>
-                    <Text style={styles.titleText}>
+                    <TouchableOpacity
+                        style={{ paddingLeft: 5 }}
+                        onPress={() => router.back()}
+                    >
+                        <FontAwesome6
+                            name="reply"
+                            size={28}
+                            color={theme.text}
+                        />
+                    </TouchableOpacity>
+                    <Text style={[styles.titleText, {color:theme.text}]}>
                         {state === "create" ? "Create New Set" : "Update Set"}
                     </Text>
                     <TouchableOpacity
@@ -124,25 +136,28 @@ const createPage = () => {
                             state === "create" ? createSet() : updateSet()
                         }
                     >
-                        <FontAwesome6 name="save" size={24} color="black" />
+                        <FontAwesome6 name="save" size={24} color={theme.text} />
                     </TouchableOpacity>
+                    
                 </View>
 
                 <View style={styles.formContainer}>
                     <View style={styles.inputContainer}>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, {color: theme.text}]}
                             value={name}
                             placeholder="Name"
+                            placeholderTextColor={theme.text}
                             onChangeText={(text) => setName(text)}
                         />
                     </View>
 
                     <View style={styles.inputContainer}>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, {color: theme.text}]}
                             value={description}
                             placeholder="Description"
+                            placeholderTextColor={theme.text}
                             multiline={true}
                             onChangeText={(text) => setDescription(text)}
                         />
@@ -153,7 +168,8 @@ const createPage = () => {
                             selectedValue={category}
                             onValueChange={(item) => setCategory(item)}
                             placeholder="Category"
-                            style={styles.input}
+                            style={[styles.input, {color:theme.text} ]}
+                            dropdownIconColor={theme.text}
                         >
                             <Picker.Item label="School" value="school" />
                             <Picker.Item label="Work" value="work" />

@@ -1,13 +1,13 @@
 export const lightTheme = {
     background: '#FFFFFF',
     text: '#000000',
-    backgroundtab: '#55bbbd',
+    detailtitle: '#0bed07',
   };
   
   export const darkTheme = {
     background: '#000000',
     text: '#FFFFFF',
-    backgroundtab: '#d68b00',
+    detailtitle: '#05deff',
   };
   
   export type Theme = typeof lightTheme;

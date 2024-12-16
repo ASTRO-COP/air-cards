@@ -16,8 +16,11 @@ import { fetchData, postData, updateData } from "@/hooks/api";
 import { router } from "expo-router";
 import { useIsFocused } from "@react-navigation/native";
 import React from "react";
+import { useTheme } from "@/hooks/ThemeProvider";
+
 
 const createCardPage = () => {
+    const { theme, toggleTheme, isDarkMode } = useTheme();
     const { state, setId, cardId } = useLocalSearchParams();
     const [name, setName] = useState("");
     const [definition, setDefinition] = useState("");
@@ -109,9 +112,19 @@ const createCardPage = () => {
                 backgroundColor="transparent"
                 translucent={true}
             />
-            <View style={styles.container}>
+            <View style={[styles.container, { backgroundColor: theme.background }]}>
                 <View style={styles.titleContainer}>
-                    <Text style={styles.titleText}>
+                    <TouchableOpacity
+                        style={{ paddingLeft: 5 }}
+                        onPress={() => router.back()}
+                    >
+                        <FontAwesome6
+                            name="reply"
+                            size={28}
+                            color={theme.text}
+                        />
+                    </TouchableOpacity>
+                    <Text style={[styles.titleText, {color:theme.text}]}>
                         {state === "create" ? "Create New Card" : "Update Set"}
                     </Text>
                     <TouchableOpacity
@@ -119,25 +132,28 @@ const createCardPage = () => {
                             state === "create" ? createCard() : updateCard();
                         }}
                     >
-                        <FontAwesome6 name="save" size={24} color="black" />
+                        <FontAwesome6 name="save" size={24} color={theme.text} />
                     </TouchableOpacity>
+                    
                 </View>
 
                 <View style={styles.formContainer}>
                     <View style={styles.inputContainer}>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input,{color: theme.text}]}
                             value={name}
                             placeholder={"Name"}
+                            placeholderTextColor={theme.text}
                             onChangeText={(text) => setName(text)}
                         />
                     </View>
 
                     <View style={styles.inputContainer}>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input,{color: theme.text}]}
                             value={definition}
                             placeholder={"Definition"}
+                            placeholderTextColor={theme.text}
                             multiline={true}
                             onChangeText={(text) => setDefinition(text)}
                         />
@@ -145,9 +161,10 @@ const createCardPage = () => {
 
                     <View style={styles.inputContainer}>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input,{color: theme.text}]}
                             value={content}
                             placeholder={"Content"}
+                            placeholderTextColor={theme.text}
                             multiline={true}
                             onChangeText={(text) => setContent(text)}
                         />

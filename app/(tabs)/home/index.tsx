@@ -12,10 +12,14 @@ import {
     StatusBar,
 } from "react-native";
 import * as SecureStore from 'expo-secure-store';
+import { useTheme } from "@/hooks/ThemeProvider";
 
 
 
 const HomePage = () => {
+
+    const { theme, toggleTheme, isDarkMode } = useTheme();
+    
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     
@@ -38,9 +42,9 @@ const HomePage = () => {
     return (
         <>
             <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent={true} />
-            <View style={styles.container}>
+            <View style={[styles.container, { backgroundColor: theme.background }]}>
                 <View style={styles.titleContainer}>
-                    <Text style={styles.titleText}>Air Cards</Text>
+                    <Text style={[styles.titleText, {color:theme.text}]}>Air Cards</Text>
 
                     <TouchableOpacity
                         style={{ paddingTop: 3 }}
@@ -53,7 +57,7 @@ const HomePage = () => {
                             })
                         }
                     >
-                        <AntDesign name="pluscircle" size={28} color="black" />
+                        <AntDesign name="pluscircle" size={28} color={theme.text} />
                     </TouchableOpacity>
                 </View>
 
