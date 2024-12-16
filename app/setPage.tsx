@@ -8,6 +8,7 @@ import Feather from '@expo/vector-icons/Feather';
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import {
+    Button,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -19,6 +20,7 @@ import { Menu, MenuItem } from 'react-native-material-menu'; // Example: React N
 import { fetchData } from "@/hooks/api";
 import { useIsFocused } from "@react-navigation/native";
 import React from "react";
+import { useTheme } from "../hooks/ThemeProvider";
 
 interface CardData {
     name: string;
@@ -29,7 +31,10 @@ interface CardData {
     _id: string;
 }
 
-const setPage = () => {
+const SetPage = () => {
+
+    const { theme, toggleTheme, isDarkMode } = useTheme();
+
     const { setId } = useLocalSearchParams(); 
     const isFocused = useIsFocused();
 
@@ -67,8 +72,8 @@ const setPage = () => {
 
     return (
         <>
-            <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent={true} />
-            <View style={styles.container}>
+            <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} backgroundColor={theme.background} />
+            <View style={[styles.container, { backgroundColor: theme.background }]}>
                 <View style={styles.titleContainer}>
                     <TouchableOpacity
                         style={{ paddingLeft: 5 }}
@@ -76,7 +81,8 @@ const setPage = () => {
                     >
                         <FontAwesome6 name="reply" size={28} color="black" />
                     </TouchableOpacity>
-                    
+                    <Text style={[styles.title, { color: theme.text }]}>Air Cards</Text>
+                        <Button title="Toggle Theme" onPress={toggleTheme} />
                     <Text style={styles.titleText}>Air Cards</Text>
                     
                    {/* Dropdown Button */}
@@ -294,4 +300,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default setPage;
+export default SetPage;

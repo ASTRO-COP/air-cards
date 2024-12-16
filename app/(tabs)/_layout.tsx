@@ -2,29 +2,33 @@ import { Tabs } from "expo-router";
 import { Text, View } from "react-native";
 import Entypo from "@expo/vector-icons/Entypo";
 import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
+import { useTheme } from "@/hooks/ThemeProvider";
 
 const TabLayout = () => {
+    const { theme, isDarkMode } = useTheme();
+
     return (
-        <Tabs screenOptions={({ route }) => ({
+        <Tabs  screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
 
                 if (route.name === "home/index") {
-                    return focused ? <FontAwesome name="home" size={24} color="black" /> : <AntDesign name="home" size={24} color="black" />;
+                    return focused ? <FontAwesome name="home" size={24} color={theme.text} /> : <AntDesign name="home" size={24} color={theme.text} />;
                 } else if (route.name === "profile/index") {
-                    return focused ? <Ionicons name="person" size={24} color="black" /> : <Ionicons name="person-outline" size={24} color="black" />
+                    return focused ? <Ionicons name="person" size={24} color={theme.text} /> : <Ionicons name="person-outline" size={24} color={theme.text} />
                 }
 
             },
             title: '',
             headerShown: false,
             tabBarStyle: {
+                backgroundColor: theme.background,
                 marginBottom: 20,
                 marginHorizontal: 20,
                 borderRadius: 10,
                 paddingTop: 5,
             }
         })}>
-
+            
         </Tabs>
     );
 };

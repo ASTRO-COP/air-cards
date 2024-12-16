@@ -4,8 +4,10 @@ import { router } from "expo-router";
 import { AntDesign, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { fetchData } from "@/hooks/api";
+import { useTheme } from "../../../hooks/ThemeProvider";
 
 const ProfilePage = () => {
+    const { theme, toggleTheme, isDarkMode } = useTheme();
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
@@ -30,7 +32,7 @@ const ProfilePage = () => {
     }, [])
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: theme.background }]}>
             <View style={styles.titleContainer}>
                 <MaterialCommunityIcons name="face-man-profile" size={100} color="black" />
                 <Text style={styles.title}>{"trav.whoami"}</Text>
