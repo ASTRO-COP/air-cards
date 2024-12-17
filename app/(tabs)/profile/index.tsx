@@ -7,11 +7,9 @@ import { useEffect, useState,useRef  } from "react";
 import { fetchData } from "@/hooks/api";
 import { useTheme } from "../../../hooks/ThemeProvider";
 
+
 const ProfilePage = () => {
     const { theme, toggleTheme, isDarkMode } = useTheme();
-    const [isDarkTheme1, setIsDarkTheme1] = useState(false);
-
-    const toggleTheme1 = () => setIsDarkTheme1((prev) => !prev);
 
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -40,6 +38,32 @@ const ProfilePage = () => {
     // Animated value for the transition
     const animatedValue = useRef(new Animated.Value(0)).current;
 
+    // Animate theme transitions
+    useEffect(() => {
+        Animated.timing(animatedValue, {
+            toValue: isDarkMode ? 1 : 0,
+            duration: 500, // Animation duration
+            useNativeDriver: true, // Set to false for non-native properties like color
+        }).start();
+    }, [isDarkMode]);
+
+    // Interpolated  color
+    const backgroundColor = animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['#FFFFFF', '#303030'], // Light to dark
+    });
+
+    
+    const textColor = animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['#000000', '#FFFFFF'], // Light to dark
+    });
+
+    const detail = animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['#a16e00', '#0ad6f5'], // Light to dark
+    });
+
     useEffect(() => {
         // Animate between 0 (light mode) and 1 (dark mode)
         Animated.timing(animatedValue, {
@@ -66,13 +90,13 @@ const ProfilePage = () => {
     });
 
     return (
-        <View style={[styles.container, { backgroundColor: theme.background }]}>
+        <Animated.View style={[styles.container, { backgroundColor}]}>
             <View style={styles.titleContainer}>
                 <MaterialCommunityIcons name="face-man-profile" size={100} color="black" />
-                <Text style={[styles.title, {color:theme.text}]}>{"trav.whoami"}</Text>
-                <Text style={[styles.subTitle,{color:theme.detailtitle}]}>{email}</Text>
+                <Animated.Text style={[styles.title, {color:textColor}]}>{"trav.whoami"}</Animated.Text>
+                <Animated.Text style={[styles.subTitle,{color:detail}]}>{email}</Animated.Text>
 
-                <TouchableOpacity style={styles.editBtn}>
+                <TouchableOpacity style={[styles.editBtn, {backgroundColor:theme.button}]}>
                     <Text style={{ color: 'white', fontSize: 18}}>Edit Profile</Text>
                 </TouchableOpacity>
                 {/*  Switch */}
@@ -80,13 +104,13 @@ const ProfilePage = () => {
             </View>
 
             <View style={styles.body}>
-                <Text style={[styles.bodyTitle, {color:theme.detailtitle}]}>Inventories</Text>
+                <Animated.Text style={[styles.bodyTitle, {color:detail}]}>Inventories</Animated.Text>
 
                 <View style={styles.bodyContent}>
                     <TouchableOpacity style={styles.bodyItem}>
                         <View style={{ flexDirection: 'row', gap: 10}}>
                             <AntDesign name="profile" size={24} color="black" />
-                            <Text style={{ fontSize: 16}}>About Astro Logic</Text>
+                            <Animated.Text style={{ fontSize: 16}}>About Astro Logic</Animated.Text>
                         </View>
                         <AntDesign name="arrowright" size={24} color="black" />
                     </TouchableOpacity>
@@ -97,9 +121,9 @@ const ProfilePage = () => {
                     }}>
                         <View style={{ flexDirection: 'row', gap: 10}}>
                             <FontAwesome name="support" size={24} color="black" />
-                            <Text style={{ fontSize: 16}}>Support</Text>
+                            <Animated.Text style={{ fontSize: 16}}>Support</Animated.Text>
                         </View>
-                        <AntDesign name="arrowright" size={24} color={theme.text} />
+                        <AntDesign name="arrowright" size={24} color="black" />
                     </TouchableOpacity>
                     <View  style={[styles.bodyItem, { borderBottomWidth: 0 }]}>
                         <View style={{ flexDirection: 'row', gap: 10}}>
@@ -121,13 +145,13 @@ const ProfilePage = () => {
                         <Switch
                             value={isDarkMode} // Use global dark mode state
                             onValueChange={toggleTheme} // Use global toggleTheme function
-                            thumbColor={isDarkMode ? '#FFF' : '#333'}
+                            thumbColor={isDarkMode ? '#787878' : '#333'}
                             trackColor={{ false: '#767577', true: '#81b0ff' }}
                         />
                     </View>
                 </View>
             </View>
-        </View>
+        </Animated.View>
     );
 };
 

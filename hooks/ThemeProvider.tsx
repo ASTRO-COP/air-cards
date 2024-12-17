@@ -6,7 +6,7 @@ const lightTheme = {
   text: "#000000",
   detailtitle: '#a16e00',
   datetime: '#480487',
-  tabbackground: "#ff0000"
+  button: '#000000',
 };
 
 const darkTheme = {
@@ -14,7 +14,7 @@ const darkTheme = {
   text: "#FFFFFF",
   detailtitle: '#0ad6f5',
   datetime: '#fff700',
-  tabbackground: "#9005ed"
+  button: '#7f807e',
 };
 
 interface ThemeContextProps {
