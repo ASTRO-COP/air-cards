@@ -33,7 +33,7 @@ const createPage = () => {
         "#D91656",
         "#FFB200",
         "#4335A7",
-        "#7ED4AD",
+        "#7ED4AD",                  
         "#1A1A1D",
     ];
 
@@ -248,6 +248,7 @@ const styles = StyleSheet.create({
         width: "100%",
         flexDirection: "row",
         alignItems: "center",
+        justifyContent: 'center',
         gap: 15,
     },
     colorSelector: {

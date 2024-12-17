@@ -33,7 +33,7 @@ const createCardPage = () => {
         "#0A5EB0",
         "#D91656",
         "#FFB200",
-        "#4335A7",
+        "#4335A7", 
         "#7ED4AD",
         "#1A1A1D",
     ];
@@ -71,7 +71,7 @@ const createCardPage = () => {
             try {
                 const result = await postData("/cards", cardData);
                 console.log(result);
-                router.replace("/(tabs)/home");
+                router.back();
             } catch (err) {
                 console.log(err);
             } finally {
@@ -95,7 +95,7 @@ const createCardPage = () => {
                 const result = await updateData(`/cards/${cardId}`, cardData);
                 console.log(result);
                 console.log(name);
-                router.replace("/(tabs)/home");
+                router.back();
             } catch (err) {
                 console.log(err);
             } finally {

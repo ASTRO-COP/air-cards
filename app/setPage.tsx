@@ -1,10 +1,10 @@
 import SetCard from "@/components/SetCreateCard";
 import { AntDesign } from "@expo/vector-icons";
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import Fontisto from '@expo/vector-icons/Fontisto';
-import Feather from '@expo/vector-icons/Feather';
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Fontisto from "@expo/vector-icons/Fontisto";
+import Feather from "@expo/vector-icons/Feather";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import {
@@ -16,7 +16,7 @@ import {
     FlatList,
     StatusBar,
 } from "react-native";
-import { Menu, MenuItem } from 'react-native-material-menu'; // Example: React Native Material Menu
+import { Menu, MenuItem } from "react-native-material-menu"; // Example: React Native Material Menu
 import { fetchData } from "@/hooks/api";
 import { useIsFocused } from "@react-navigation/native";
 import React from "react";
@@ -34,27 +34,42 @@ interface CardData {
 const SetPage = () => {
 
     const { theme, toggleTheme, isDarkMode } = useTheme();
-
+    const [listOption, setListOption] = useState("all");
     const { setId } = useLocalSearchParams(); 
     const isFocused = useIsFocused();
 
     const [data, setData] = useState<CardData[]>([]);
 
-    useEffect(() => {
-        const getData = async () => {
-            try {
-                const result = await fetchData(`/cards/search?belongs=${setId}`);
-                setData(result);
-            } catch (err) {
-                console.log(err);
-            }
+    const getData = async () => {
+        try {
+            const result = await fetchData(`/cards/search?belongs=${setId}`);
+            const parsedData = result.map((item: CardData) => ({
+                ...item,
+                datetime: item.datetime ? new Date(item.datetime) : new Date(0), // Fallback to epoch for invalid dates
+            }));
+            console.log(parsedData[0].datetime);
+            setData(parsedData);
+        } catch (err) {
+            console.log(err);
         }
-        getData();
+    };
 
-        if (isFocused) {
-            getData();
+    const sortData = (data: CardData[], option: string): CardData[] => {
+        switch (option) {
+            case "latest":
+                return data.reverse();
+            case "a-z":
+                return [...data].sort((a, b) => a.name.localeCompare(b.name));
+            default:
+                return data.reverse();
         }
-    }, []);
+    };
+
+    useEffect(() => {
+        if (isFocused) {
+            getData(); // Re-fetch data when the screen is focused
+        }
+    }, [isFocused]);
 
     const [isGridView, setIsGridView] = useState(true); // State to toggle view
     const [menuVisible, setMenuVisible] = useState(false); // Dropdown visibility
@@ -64,10 +79,9 @@ const SetPage = () => {
         setMenuVisible(false); // Close dropdown after selection
     };
 
-    const [selected, setSelected] = useState('All'); // State to track the selected button
-
     const handlePress = (buttonName: string) => {
-        setSelected(buttonName); // Update the state with the button name
+        setListOption(buttonName); // Update the state with the button name
+        setData((prevData) => sortData(prevData, buttonName));
     };
 
     return (
@@ -92,16 +106,28 @@ const SetPage = () => {
                                 onPress={() => setMenuVisible(true)}
                             >
                                 <Text>
-                                    {isGridView ? <Feather name="grid" size={24}  color="white" />: <FontAwesome name="th-list" size={23} color="white" />}
+                                    {isGridView ? (
+                                        <Feather
+                                            name="grid"
+                                            size={24}
+                                            color="white"
+                                        />
+                                    ) : (
+                                        <FontAwesome
+                                            name="th-list"
+                                            size={23}
+                                            color="white"
+                                        />
+                                    )}
                                 </Text>
                             </TouchableOpacity>
                         }
                         onRequestClose={() => setMenuVisible(false)}
                     >
-                        <MenuItem onPress={() => toggleLayout("grid")}  >
-                            <Feather name="grid" size={24} color="black"  /> Grid
+                        <MenuItem onPress={() => toggleLayout("grid")}>
+                            <Feather name="grid" size={24} color="black" /> Grid
                         </MenuItem>
-                        <MenuItem onPress={() => toggleLayout("list")} >
+                        <MenuItem onPress={() => toggleLayout("list")}>
                             <Feather name="list" size={24} color="black" /> List
                         </MenuItem>
                     </Menu>
@@ -110,23 +136,24 @@ const SetPage = () => {
                             router.push({
                                 pathname: "/createCard",
                                 params: {
-                                    state: 'create',
+                                    state: "create",
                                     setId: setId,
-                                }
+                                },
                             })
                         }
                     >
+
                         
                         <AntDesign name="pluscircle" size={30} color={theme.text} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.sortContainer}>
                     {/* "All" button */}
-                    <TouchableOpacity onPress={() => handlePress('All')}>
+                    <TouchableOpacity onPress={() => handlePress("all")}>
                         <Text
                             style={[
                                 styles.sortText,
-                                selected === 'All' && styles.selectedText, // Highlight if selected
+                                listOption === "all" && styles.selectedText, // Highlight if selected
                             ]}
                         >
                             All
@@ -134,11 +161,11 @@ const SetPage = () => {
                     </TouchableOpacity>
 
                     {/* "Latest" button */}
-                    <TouchableOpacity onPress={() => handlePress('Latest')}>
+                    <TouchableOpacity onPress={() => handlePress("latest")}>
                         <Text
                             style={[
                                 styles.sortText2,
-                                selected === 'Latest' && styles.selectedText, // Highlight if selected
+                                listOption === "latest" && styles.selectedText, // Highlight if selected
                             ]}
                         >
                             Latest
@@ -146,11 +173,11 @@ const SetPage = () => {
                     </TouchableOpacity>
 
                     {/* "Oldest" button */}
-                    <TouchableOpacity onPress={() => handlePress('Oldest')}>
+                    <TouchableOpacity onPress={() => handlePress("oldest")}>
                         <Text
                             style={[
                                 styles.sortText,
-                                selected === 'Oldest' && styles.selectedText, // Highlight if selected
+                                listOption === "oldest" && styles.selectedText, // Highlight if selected
                             ]}
                         >
                             Oldest
@@ -158,18 +185,17 @@ const SetPage = () => {
                     </TouchableOpacity>
 
                     {/* "A-Z" button */}
-                    <TouchableOpacity onPress={() => handlePress('A-Z')}>
+                    <TouchableOpacity onPress={() => handlePress("a-z")}>
                         <Text
                             style={[
                                 styles.sortText2,
-                                selected === 'A-Z' && styles.selectedText, // Highlight if selected
+                                listOption === "a-z" && styles.selectedText, // Highlight if selected
                             ]}
                         >
                             A-Z
                         </Text>
                     </TouchableOpacity>
                 </View>
-                
 
                 <FlatList
                     key={`${isGridView}`} // Unique key to force re-render
@@ -184,20 +210,20 @@ const SetPage = () => {
                                 color={item.color}
                                 teleport={() => {
                                     router.push({
-                                        pathname: '/cardDetail',
+                                        pathname: "/cardDetail",
                                         params: {
                                             cardId: item._id,
-                                        }
-                                    })
+                                        },
+                                    });
                                 }}
                                 updateTeleport={() => {
                                     router.push({
-                                        pathname: '/createCard',
+                                        pathname: "/createCard",
                                         params: {
-                                            state: 'update',
+                                            state: "update",
                                             cardId: item._id,
-                                        }
-                                    })
+                                        },
+                                    });
                                 }}
                             />
                         </View>
@@ -232,10 +258,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: "#000000",
         justifyContent: "center",
-        marginTop:2,
+        marginTop: 2,
         marginLeft: 15,
-        borderWidth:2,
-        borderColor: '#c2c0c0',
+        borderWidth: 2,
+        borderColor: "#c2c0c0",
     },
     cardContainer: {
         marginTop: 40,
@@ -243,13 +269,13 @@ const styles = StyleSheet.create({
     },
     cardWrapper: {
         flex: 1,
-        margin: 5, 
+        margin: 5,
     },
-    sortContainer:{
+    sortContainer: {
         flexDirection: "row",
         marginLeft: 10,
     },
-    sortText:{
+    sortText: {
         fontSize: 16,
         fontWeight: "bold",
         color: "black",
@@ -257,11 +283,11 @@ const styles = StyleSheet.create({
         marginTop: 10,
         paddingHorizontal: 20,
         paddingVertical: 5,
-        borderWidth:2,
-        borderColor: '#c2c0c0',
+        borderWidth: 2,
+        borderColor: "#c2c0c0",
         borderTopLeftRadius: 10,
-        borderTopRightRadius:25,
-        borderBottomLeftRadius:10,
+        borderTopRightRadius: 25,
+        borderBottomLeftRadius: 10,
         borderBottomRightRadius: 5,
         elevation: 2,
         shadowOffset: { width: 0, height: 2 },
@@ -270,7 +296,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#f7f2f2",
         shadowColor: "#000",
     },
-    sortText2:{
+    sortText2: {
         fontSize: 16,
         fontWeight: "bold",
         color: "black",
@@ -278,11 +304,11 @@ const styles = StyleSheet.create({
         marginTop: 10,
         paddingHorizontal: 20,
         paddingVertical: 5,
-        borderWidth:2,
-        borderColor: '#c2c0c0',
+        borderWidth: 2,
+        borderColor: "#c2c0c0",
         borderTopLeftRadius: 10,
-        borderTopRightRadius:5,
-        borderBottomLeftRadius:25,
+        borderTopRightRadius: 5,
+        borderBottomLeftRadius: 25,
         borderBottomRightRadius: 10,
         elevation: 2,
         shadowOffset: { width: 0, height: 2 },
@@ -292,9 +318,9 @@ const styles = StyleSheet.create({
         shadowColor: "#000",
     },
     selectedText: {
-        fontWeight: 'bold',
-        backgroundColor: '#000000',
-        color: '#ffffff',
+        fontWeight: "bold",
+        backgroundColor: "#000000",
+        color: "#ffffff",
     },
 });
 
