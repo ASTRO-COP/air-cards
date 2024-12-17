@@ -1,18 +1,18 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import * as SecureStore from "expo-secure-store";
+
+import { Image, StyleSheet, Text, TouchableOpacity, View,Switch, Animated } from "react-native";
+import * as SecureStore from 'expo-secure-store';
 import { router } from "expo-router";
-import {
-    AntDesign,
-    FontAwesome,
-    MaterialCommunityIcons,
-    MaterialIcons,
-} from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import { AntDesign, FontAwesome, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import Entypo from '@expo/vector-icons/Entypo';
+import { useEffect, useState,useRef  } from "react";
 import { fetchData } from "@/hooks/api";
+import { useTheme } from "../../../hooks/ThemeProvider";
+
 
 const ProfilePage = () => {
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
+    const { theme, toggleTheme, isDarkMode } = useTheme();
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -34,34 +34,83 @@ const ProfilePage = () => {
         getData();
     }, []);
 
-    return (
-        <View style={styles.container}>
-            <View style={styles.titleContainer}>
-                <MaterialCommunityIcons
-                    name="face-man-profile"
-                    size={100}
-                    color="black"
-                />
-                <Text style={styles.title}>{"trav.whoami"}</Text>
-                <Text style={styles.subTitle}>{email}</Text>
 
-                <TouchableOpacity style={styles.editBtn}>
-                    <Text style={{ color: "white", fontSize: 18 }}>
-                        Edit Profile
-                    </Text>
+    // Animated value for the transition
+    const animatedValue = useRef(new Animated.Value(0)).current;
+
+    // Animate theme transitions
+    useEffect(() => {
+        Animated.timing(animatedValue, {
+            toValue: isDarkMode ? 1 : 0,
+            duration: 500, // Animation duration
+            useNativeDriver: true, // Set to false for non-native properties like color
+        }).start();
+    }, [isDarkMode]);
+
+    // Interpolated  color
+    const backgroundColor = animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['#FFFFFF', '#303030'], // Light to dark
+    });
+
+    
+    const textColor = animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['#000000', '#FFFFFF'], // Light to dark
+    });
+
+    const detail = animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['#a16e00', '#0ad6f5'], // Light to dark
+    });
+
+    useEffect(() => {
+        // Animate between 0 (light mode) and 1 (dark mode)
+        Animated.timing(animatedValue, {
+            toValue: isDarkMode ? 1 : 0,
+            duration: 300, // Transition duration in milliseconds
+            useNativeDriver: true,
+        }).start();
+    }, [isDarkMode]);
+
+    // Interpolating values for rotation or fade
+    const rotation = animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: ["0deg", "180deg"], // Rotates the icon
+    });
+
+    const scale = animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: [1, 1.2], // Scales the icon slightly
+    });
+
+    const opacity = animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: [1, 0.8], // Changes opacity
+    });
+
+    return (
+        <Animated.View style={[styles.container, { backgroundColor}]}>
+            <View style={styles.titleContainer}>
+                <MaterialCommunityIcons name="face-man-profile" size={100} color="black" />
+                <Animated.Text style={[styles.title, {color:textColor}]}>{"trav.whoami"}</Animated.Text>
+                <Animated.Text style={[styles.subTitle,{color:detail}]}>{email}</Animated.Text>
+
+                <TouchableOpacity style={[styles.editBtn, {backgroundColor:theme.button}]}>
+                    <Text style={{ color: 'white', fontSize: 18}}>Edit Profile</Text>
                 </TouchableOpacity>
+                {/*  Switch */}
+                
             </View>
 
             <View style={styles.body}>
-                <Text style={styles.bodyTitle}>Inventories</Text>
+                <Animated.Text style={[styles.bodyTitle, {color:detail}]}>Inventories</Animated.Text>
 
                 <View style={styles.bodyContent}>
                     <TouchableOpacity style={styles.bodyItem}>
                         <View style={{ flexDirection: "row", gap: 10 }}>
                             <AntDesign name="profile" size={24} color="black" />
-                            <Text style={{ fontSize: 16 }}>
-                                About Astro Logic
-                            </Text>
+                            <Animated.Text style={{ fontSize: 16}}>About Astro Logic</Animated.Text>
                         </View>
                         <AntDesign name="arrowright" size={24} color="black" />
                     </TouchableOpacity>
@@ -75,10 +124,34 @@ const ProfilePage = () => {
                                 size={24}
                                 color="black"
                             />
-                            <Text style={{ fontSize: 16 }}>Support</Text>
+                            <Animated.Text style={{ fontSize: 16}}>Support</Animated.Text>
                         </View>
                         <AntDesign name="arrowright" size={24} color="black" />
                     </TouchableOpacity>
+                    <View  style={[styles.bodyItem, { borderBottomWidth: 0 }]}>
+                        <View style={{ flexDirection: 'row', gap: 10}}>
+                            <Animated.View
+                                style={{
+                                    transform: [{ rotate: rotation }, { scale }],
+                                    opacity,
+                                }}
+                            >
+                                {/* Change the icon dynamically */}
+                                <Entypo
+                                    name={isDarkMode ? "moon" : "light-up"}
+                                    size={26}
+                                    color="black"
+                                />
+                            </Animated.View>
+                            <Text style={{ fontSize: 16, color:"black"}}>{isDarkMode ? "Dark Mode" : "Light Mode"}</Text>
+                        </View>
+                        <Switch
+                            value={isDarkMode} // Use global dark mode state
+                            onValueChange={toggleTheme} // Use global toggleTheme function
+                            thumbColor={isDarkMode ? '#787878' : '#333'}
+                            trackColor={{ false: '#767577', true: '#81b0ff' }}
+                        />
+                    </View>
                 </View>
 
                 <Text style={[styles.bodyTitle, { marginTop: 20 }]}>
@@ -106,7 +179,7 @@ const ProfilePage = () => {
                     </TouchableOpacity>
                 </View>
             </View>
-        </View>
+        </Animated.View>
     );
 };
 
@@ -171,6 +244,10 @@ const styles = StyleSheet.create({
         marginTop: 10,
         paddingHorizontal: 10,
         justifyContent: "space-between",
+    },
+    text: {
+        fontSize: 18,
+        marginBottom: 10,
     },
 });
 

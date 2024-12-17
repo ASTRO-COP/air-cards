@@ -8,6 +8,7 @@ import Feather from "@expo/vector-icons/Feather";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import {
+    Button,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -19,6 +20,7 @@ import { Menu, MenuItem } from "react-native-material-menu"; // Example: React N
 import { fetchData } from "@/hooks/api";
 import { useIsFocused } from "@react-navigation/native";
 import React from "react";
+import { useTheme } from "../hooks/ThemeProvider";
 
 interface CardData {
     name: string;
@@ -29,10 +31,12 @@ interface CardData {
     _id: string;
 }
 
-const setPage = () => {
-    const { setId } = useLocalSearchParams();
+const SetPage = () => {
+
+    const { theme, toggleTheme, isDarkMode } = useTheme();
     const [listOption, setListOption] = useState("all");
-    const isFocused = useIsFocused(); // Hook to check if the screen is focused
+    const { setId } = useLocalSearchParams(); 
+    const isFocused = useIsFocused();
 
     const [data, setData] = useState<CardData[]>([]);
 
@@ -82,23 +86,18 @@ const setPage = () => {
 
     return (
         <>
-            <StatusBar
-                barStyle="dark-content"
-                backgroundColor="transparent"
-                translucent={true}
-            />
-            <View style={styles.container}>
+            <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} backgroundColor={theme.background} />
+            <View style={[styles.container, { backgroundColor: theme.background }]}>
                 <View style={styles.titleContainer}>
                     <TouchableOpacity
                         style={{ paddingLeft: 5 }}
                         onPress={() => router.push("/home")}
                     >
-                        <FontAwesome6 name="reply" size={28} color="black" />
+                        <FontAwesome6 name="reply" size={28} color={theme.text} />
                     </TouchableOpacity>
-
-                    <Text style={styles.titleText}>Air Cards</Text>
-
-                    {/* Dropdown Button */}
+                    <Text style={[styles.titleText, {color:theme.text}]}>Air Cards</Text>
+                    
+                   {/* Dropdown Button */}
                     <Menu
                         visible={menuVisible}
                         anchor={
@@ -143,7 +142,9 @@ const setPage = () => {
                             })
                         }
                     >
-                        <AntDesign name="pluscircle" size={30} color="black" />
+
+                        
+                        <AntDesign name="pluscircle" size={30} color={theme.text} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.sortContainer}>
@@ -323,4 +324,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default setPage;
+export default SetPage;
