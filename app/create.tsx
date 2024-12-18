@@ -147,7 +147,7 @@ const createPage = () => {
                             style={[styles.input, {color: theme.text}]}
                             value={name}
                             placeholder="Name"
-                            placeholderTextColor={theme.text}
+                            placeholderTextColor={theme.placeholders}
                             onChangeText={(text) => setName(text)}
                         />
                     </View>
@@ -157,7 +157,7 @@ const createPage = () => {
                             style={[styles.input, {color: theme.text}]}
                             value={description}
                             placeholder="Description"
-                            placeholderTextColor={theme.text}
+                            placeholderTextColor={theme.placeholders}
                             multiline={true}
                             onChangeText={(text) => setDescription(text)}
                         />

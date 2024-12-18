@@ -7,14 +7,16 @@ const lightTheme = {
   detailtitle: '#a16e00',
   datetime: '#480487',
   button: '#000000',
+  placeholders: 'gray',
 };
 
 const darkTheme = {
-  background: "#303030",
+  background: "#242526",
   text: "#FFFFFF",
   detailtitle: '#0ad6f5',
   datetime: '#fff700',
   button: '#7f807e',
+  placeholders: 'gray',
 };
 
 interface ThemeContextProps {

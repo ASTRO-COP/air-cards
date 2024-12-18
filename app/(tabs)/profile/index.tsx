@@ -1,18 +1,29 @@
-
-import { Image, StyleSheet, Text, TouchableOpacity, View,Switch, Animated } from "react-native";
-import * as SecureStore from 'expo-secure-store';
+import {
+    Image,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+    Switch,
+    Animated,
+} from "react-native";
+import * as SecureStore from "expo-secure-store";
 import { router } from "expo-router";
-import { AntDesign, FontAwesome, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import Entypo from '@expo/vector-icons/Entypo';
-import { useEffect, useState,useRef  } from "react";
+import {
+    AntDesign,
+    FontAwesome,
+    MaterialCommunityIcons,
+    MaterialIcons,
+} from "@expo/vector-icons";
+import Entypo from "@expo/vector-icons/Entypo";
+import { useEffect, useState, useRef } from "react";
 import { fetchData } from "@/hooks/api";
 import { useTheme } from "../../../hooks/ThemeProvider";
 
-
 const ProfilePage = () => {
     const { theme, toggleTheme, isDarkMode } = useTheme();
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -34,7 +45,6 @@ const ProfilePage = () => {
         getData();
     }, []);
 
-
     // Animated value for the transition
     const animatedValue = useRef(new Animated.Value(0)).current;
 
@@ -50,18 +60,17 @@ const ProfilePage = () => {
     // Interpolated  color
     const backgroundColor = animatedValue.interpolate({
         inputRange: [0, 1],
-        outputRange: ['#FFFFFF', '#303030'], // Light to dark
+        outputRange: ["#FFFFFF", "#242526"], // Light to dark
     });
 
-    
     const textColor = animatedValue.interpolate({
         inputRange: [0, 1],
-        outputRange: ['#000000', '#FFFFFF'], // Light to dark
+        outputRange: ["#000000", "#FFFFFF"], // Light to dark
     });
 
     const detail = animatedValue.interpolate({
         inputRange: [0, 1],
-        outputRange: ['#a16e00', '#0ad6f5'], // Light to dark
+        outputRange: ["#a16e00", "#0ad6f5"], // Light to dark
     });
 
     useEffect(() => {
@@ -90,33 +99,51 @@ const ProfilePage = () => {
     });
 
     return (
-        <Animated.View style={[styles.container, { backgroundColor}]}>
+        <Animated.View style={[styles.container, { backgroundColor }]}>
             <View style={styles.titleContainer}>
-                <MaterialCommunityIcons name="face-man-profile" size={100} color="black" />
-                <Animated.Text style={[styles.title, {color:textColor}]}>{"trav.whoami"}</Animated.Text>
-                <Animated.Text style={[styles.subTitle,{color:detail}]}>{email}</Animated.Text>
+                <MaterialCommunityIcons
+                    name="face-man-profile"
+                    size={100}
+                    color="black"
+                />
+                <Animated.Text style={[styles.title, { color: textColor }]}>
+                    {"trav.whoami"}
+                </Animated.Text>
+                <Animated.Text style={[styles.subTitle, { color: detail }]}>
+                    {email}
+                </Animated.Text>
 
-                <TouchableOpacity style={[styles.editBtn, {backgroundColor:theme.button}]}>
-                    <Text style={{ color: 'white', fontSize: 18}}>Edit Profile</Text>
+                <TouchableOpacity
+                    style={[styles.editBtn, { backgroundColor: theme.button }]}
+                    onPress={() => {
+                        router.push("/editProfile");
+                    }}
+                >
+                    <Text style={{ color: "white", fontSize: 18 }}>
+                        Edit Profile
+                    </Text>
                 </TouchableOpacity>
                 {/*  Switch */}
-                
             </View>
 
             <View style={styles.body}>
-                <Animated.Text style={[styles.bodyTitle, {color:detail}]}>Inventories</Animated.Text>
+                <Animated.Text style={[styles.bodyTitle, { color: detail }]}>
+                    Inventories
+                </Animated.Text>
 
                 <View style={styles.bodyContent}>
                     <TouchableOpacity style={styles.bodyItem}>
                         <View style={{ flexDirection: "row", gap: 10 }}>
                             <AntDesign name="profile" size={24} color="black" />
-                            <Animated.Text style={{ fontSize: 16}}>About Astro Logic</Animated.Text>
+                            <Animated.Text style={{ fontSize: 16 }}>
+                                About Astro Logic
+                            </Animated.Text>
                         </View>
                         <AntDesign name="arrowright" size={24} color="black" />
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        style={[styles.bodyItem, { borderBottomWidth: 0 }]}
+                        style={[styles.bodyItem, { borderBottomWidth: 1 }]}
                     >
                         <View style={{ flexDirection: "row", gap: 10 }}>
                             <FontAwesome
@@ -124,15 +151,20 @@ const ProfilePage = () => {
                                 size={24}
                                 color="black"
                             />
-                            <Animated.Text style={{ fontSize: 16}}>Support</Animated.Text>
+                            <Animated.Text style={{ fontSize: 16 }}>
+                                Support
+                            </Animated.Text>
                         </View>
                         <AntDesign name="arrowright" size={24} color="black" />
                     </TouchableOpacity>
-                    <View  style={[styles.bodyItem, { borderBottomWidth: 0 }]}>
-                        <View style={{ flexDirection: 'row', gap: 10}}>
+                    <View style={[styles.bodyItem, { borderBottomWidth: 0 }]}>
+                        <View style={{ flexDirection: "row", gap: 10 }}>
                             <Animated.View
                                 style={{
-                                    transform: [{ rotate: rotation }, { scale }],
+                                    transform: [
+                                        { rotate: rotation },
+                                        { scale },
+                                    ],
                                     opacity,
                                 }}
                             >
@@ -143,20 +175,24 @@ const ProfilePage = () => {
                                     color="black"
                                 />
                             </Animated.View>
-                            <Text style={{ fontSize: 16, color:"black"}}>{isDarkMode ? "Dark Mode" : "Light Mode"}</Text>
+                            <Text style={{ fontSize: 16, color: "black" }}>
+                                {isDarkMode ? "Dark Mode" : "Light Mode"}
+                            </Text>
                         </View>
                         <Switch
                             value={isDarkMode} // Use global dark mode state
                             onValueChange={toggleTheme} // Use global toggleTheme function
-                            thumbColor={isDarkMode ? '#787878' : '#333'}
-                            trackColor={{ false: '#767577', true: '#81b0ff' }}
+                            thumbColor={isDarkMode ? "#787878" : "#333"}
+                            trackColor={{ false: "#767577", true: "#81b0ff" }}
                         />
                     </View>
                 </View>
 
-                <Text style={[styles.bodyTitle, { marginTop: 20 }]}>
-                    Preferences
-                </Text>
+                <Animated.Text
+                    style={[styles.bodyTitle, { color: detail, marginTop: 20 }]}
+                >
+                    Prefrences
+                </Animated.Text>
 
                 <View style={[styles.bodyContent, { paddingBottom: 10 }]}>
                     <TouchableOpacity
@@ -173,7 +209,7 @@ const ProfilePage = () => {
                                 color="red"
                             />
                             <Text style={{ fontSize: 16, color: "red" }}>
-                                About Astro Logic
+                                Logout
                             </Text>
                         </View>
                     </TouchableOpacity>

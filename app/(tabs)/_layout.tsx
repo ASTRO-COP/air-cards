@@ -23,7 +23,7 @@ const TabLayout = () => {
         // Interpolated  color
         const backgroundColor = animatedValue.interpolate({
             inputRange: [0, 1],
-            outputRange: ['#FFFFFF', '#303030'], // Light to dark
+            outputRange: ['#FFFFFF', '#242526'], // Light to dark
         });
     
         useEffect(() => {
