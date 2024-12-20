@@ -13,8 +13,7 @@ import {
 } from "react-native";
 import * as SecureStore from 'expo-secure-store';
 import { useTheme } from "@/hooks/ThemeProvider";
-
-
+import React from "react";
 
 const HomePage = () => {
 
