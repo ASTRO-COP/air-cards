@@ -112,17 +112,6 @@ const ProfilePage = () => {
                 <Animated.Text style={[styles.subTitle, { color: detail }]}>
                     {email}
                 </Animated.Text>
-
-                <TouchableOpacity
-                    style={[styles.editBtn, { backgroundColor: theme.button }]}
-                    onPress={() => {
-                        router.push("/editProfile");
-                    }}
-                >
-                    <Text style={{ color: "white", fontSize: 18 }}>
-                        Edit Profile
-                    </Text>
-                </TouchableOpacity>
                 {/*  Switch */}
             </View>
 
@@ -152,7 +141,7 @@ const ProfilePage = () => {
                                 color="black"
                             />
                             <Animated.Text style={{ fontSize: 16 }}>
-                                Support
+                                Change Password
                             </Animated.Text>
                         </View>
                         <AntDesign name="arrowright" size={24} color="black" />
